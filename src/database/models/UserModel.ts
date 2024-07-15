@@ -1,9 +1,9 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import todoSequelize from "../setup/database";
-import { UserAttributes } from "../../interfaces/db-models/UserAttributes";
+import { DataTypes, Model, Optional } from 'sequelize';
+import todoSequelize from '../setup/database';
+import { UserAttributes } from '../../interfaces/db-models/UserAttributes';
 
 interface UserCreationAttributes
-  extends Optional<UserAttributes, "id" | "profileImgUrl"> {}
+  extends Optional<UserAttributes, 'id' | 'profileImgUrl'> {}
 
 // Define the Todo model class
 class UserModel
@@ -52,7 +52,7 @@ UserModel.init(
       allowNull: false,
     },
   },
-  { tableName: "Users", sequelize: todoSequelize }
+  { tableName: 'Users', sequelize: todoSequelize },
 );
 
 export default UserModel;
