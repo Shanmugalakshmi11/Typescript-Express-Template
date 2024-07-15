@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import TodoModel from "../../database/models/TodoModel";
-import UserModel from "../../database/models/UserModel";
+import { IMarkTodoBody } from "../../interfaces/routes/todos/TodoRequestTypes";
+import { IUpdateTodoBody } from "../../interfaces/routes/todos/TodoRequestTypes";
+import { ICreateTodoBody } from "../../interfaces/routes/todos/TodoRequestTypes";
+import { IDeleteTodoBody } from "../../interfaces/routes/todos/TodoRequestTypes";
 
 const TodosRouter = Router();
 
@@ -26,15 +29,10 @@ TodosRouter.get("/all", async (req, res) => {
   res.status(StatusCodes.OK).send(todos);
 });
 
-TodosRouter.get("/all", async (req, res) => {
-  const users = await UserModel.findAll();
-  res.status(StatusCodes.OK).send(users);
-});
-
 // PUT REQUESTS
 TodosRouter.put("/mark", async (req, res) => {
   try {
-    const { todoId, newIsDone } = req.body;
+    const { todoId, newIsDone } = req.body as IMarkTodoBody;
 
     if (!todoId) throw Error("keine User Id");
 
@@ -47,7 +45,8 @@ TodosRouter.put("/mark", async (req, res) => {
 });
 
 TodosRouter.put("/update", async (req, res) => {
-  const { todoId, newTask, newIsDone, newDueDate } = req.body;
+  const { todoId, newTask, newIsDone, newDueDate } =
+    req.body as IUpdateTodoBody;
 
   await TodoModel.update(
     {
@@ -63,7 +62,8 @@ TodosRouter.put("/update", async (req, res) => {
 
 // POST REQUESTS
 TodosRouter.post("/create", async (req, res) => {
-  const { newTask, newIsDone, newDueDate, newUserId } = req.body;
+  const { newTask, newIsDone, newDueDate, newUserId } =
+    req.body as ICreateTodoBody;
 
   console.log("Here we are", newTask, newIsDone, newDueDate, newUserId);
   if (!newTask || !newDueDate || !newUserId) {
@@ -84,7 +84,7 @@ TodosRouter.post("/create", async (req, res) => {
 
 // DELETE REQUEST
 TodosRouter.delete("/delete", async (req, res) => {
-  const { todoId } = req.body; //req.body.todoId
+  const { todoId } = req.body as IDeleteTodoBody; //req.body.todoId
 
   await TodoModel.destroy({ where: { id: todoId } });
 
